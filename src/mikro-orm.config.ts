@@ -2,11 +2,10 @@ import { __prod__ } from "./constants";
 import { Post } from "./entities/Post";
 import { MikroORM } from "@mikro-orm/core";
 import path from "path";
-// import dotenv from "dotenv";
-// dotenv.config();
-require("dotenv").config();
+import dotenv from "dotenv";
+dotenv.config();
 
-console.log(__dirname);
+console.log("__dirname", __dirname);
 
 export interface ConnectionOptions {
   dbName?: string;
