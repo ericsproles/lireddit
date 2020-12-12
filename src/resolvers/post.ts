@@ -18,7 +18,7 @@ export class PostResolver {
   }
 
   @Mutation(() => Post)
-  async creatPost(
+  async createPost(
     @Arg("title", () => String) title: string,
     @Ctx() { em }: MyContext
   ): Promise<Post> {
