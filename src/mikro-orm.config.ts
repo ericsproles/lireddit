@@ -3,6 +3,7 @@ import { Post } from "./entities/Post";
 import { MikroORM } from "@mikro-orm/core";
 import path from "path";
 import dotenv from "dotenv";
+import { User } from "./entities/User";
 dotenv.config();
 
 console.log("__dirname", __dirname);
@@ -21,7 +22,7 @@ export default {
     path: path.join(__dirname, "./migrations"), // path to the folder with migrations
     pattern: /^[\w-]+\d+\.[tj]s$/, // regex pattern for the migration files
   },
-  entities: [Post],
+  entities: [Post, User],
   dbName: process.env.POSTGRES_USERNAME,
   password: process.env.POSTGRES_PASSWORD,
   host: process.env.POSTGRES_CONNECTION_URL,
