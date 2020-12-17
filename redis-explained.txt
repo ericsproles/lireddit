@@ -1,0 +1,19 @@
+
+req.session.userId = user.id;
+
+{ userId: 1 } -> send that to redis
+
+ 1. Store in redis
+  sess: qweasdzc -> { userId: 1 }
+
+2. signed version of key is sent to the browser
+  express-session will set a cookie on my browser qe0730ueiwquwe12837123hjwe
+
+3. whenever user makes a request, this is sent to the server
+  qe0730ueiwquwe12837123hjwe -> sent to the server
+
+4. decrypt the cookie and get the key for redis, using the secret key we specified
+  qe0730ueiwquwe12837123hjwe ->  sess: qweasdzc
+
+5. make a request to redis and look up the key in redis to get the data
+  sess: qweasdzc -> { userId: 1 }
