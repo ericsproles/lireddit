@@ -1,0 +1,9 @@
+{
+  "folders": [
+	{
+		"path": "../../../newreddit-server"
+	}
+],
+  "remoteAuthority": "wsl+Ubuntu-20.04",
+  "settings": {}
+}
