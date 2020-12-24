@@ -30,10 +30,6 @@ export const Register: React.FC<registerProps> = ({}) => {
         onSubmit={async (values) => {
           console.log(values);
           const response = await register(values);
-          console.log(
-            "🚀 ~ file: register.tsx ~ line 33 ~ onSubmit={ ~ response",
-            response
-          );
         }}
       >
         {({ isSubmitting }) => (
