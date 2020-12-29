@@ -31,7 +31,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
   } else {
     body = (
       <Flex>
-        <Box mr={2}>{data.me.username}</Box>
+        <Box mr={2}>hi, {data.me.username}</Box>
         <Button variant="link">logout</Button>
       </Flex>
     );
