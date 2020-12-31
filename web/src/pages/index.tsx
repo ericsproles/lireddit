@@ -1,19 +1,22 @@
-import {
-  Link as ChakraLink,
-  Text,
-  Code,
-  List,
-  ListIcon,
-  ListItem,
-} from "@chakra-ui/react";
-import { CheckCircleIcon, LinkIcon } from "@chakra-ui/icons";
 import { Navbar } from "../components/Navbar";
+import { withUrqlClient } from "next-urql";
+import { createUrqlClient } from "../utils/createUrqlClient";
+import { usePostsQuery } from "../generated/graphql";
 
-const Index = () => (
-  <div>
-    <Navbar />
-    <div>hello world</div>
-  </div>
+const Index = () => {
+  const [{ data }] = usePostsQuery();
+  return (
+    <div>
+      <Navbar />
+      <div>hello world</div>
+      <br />
+      {!data ? (
+        <div>loading...</div>
+      ) : (
+        data.posts.map((post) => <div key={post.id}>{post.title}</div>)
+      )}
+    </div>
+  );
   // <Container height="100vh">
   //   <Hero />
   //   <Main>
@@ -49,6 +52,6 @@ const Index = () => (
   //   </Footer>
   //   <CTA />
   // </Container>
-);
+};
 
-export default Index;
+export default withUrqlClient(createUrqlClient, { ssr: true })(Index);
