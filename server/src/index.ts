@@ -1,7 +1,5 @@
 import "reflect-metadata";
-import { MikroORM } from "@mikro-orm/core";
 import { COOKIE_NAME, __prod__ } from "./constants";
-import microConfig from "./mikro-orm.config";
 import express from "express";
 import session from "express-session";
 import Redis from "ioredis";
@@ -12,13 +10,26 @@ import { PostResolver } from "./resolvers/post";
 import { UserResolver } from "./resolvers/user";
 import connectRedis from "connect-redis";
 import cors from "cors";
+import { createConnection } from "typeorm";
+import { Post } from "./entities/Post";
+import { User } from "./entities/User";
+import dotenv from "dotenv";
+dotenv.config();
 
 const main = async () => {
+  const conn = await createConnection({
+    type: "postgres",
+    database: "newreddit2",
+    username: process.env.POSTGRES_USERNAME,
+    password: process.env.POSTGRES_PASSWORD,
+    logging: true,
+    synchronize: true,
+    entities: [Post, User],
+  });
+
+  console.log("process.env.POSTGRES_PASSWORD", process.env.POSTGRES_PASSWORD);
+
   // Connect to DB
-  const orm = await MikroORM.init(microConfig);
-  // await orm.em.nativeDelete(User, {});
-  // Run Migrations
-  await orm.getMigrator().up();
 
   const app = express();
 
@@ -57,7 +68,7 @@ const main = async () => {
       resolvers: [HelloResolver, PostResolver, UserResolver],
       validate: false,
     }),
-    context: ({ req, res }) => ({ em: orm.em, req, res, redis }),
+    context: ({ req, res }) => ({ req, res, redis }),
   });
 
   apolloServer.applyMiddleware({
