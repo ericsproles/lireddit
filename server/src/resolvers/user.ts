@@ -40,7 +40,7 @@ export class UserResolver {
   async changePassword(
     @Arg("token") token: string,
     @Arg("newPassword") newPassword: string,
-    @Ctx() { em, redis, req }: MyContext
+    @Ctx() { redis, req }: MyContext
   ): Promise<UserResponse> {
     if (newPassword.length <= 2) {
       return {
@@ -95,7 +95,7 @@ export class UserResolver {
   @Mutation(() => Boolean)
   async forgotPassword(
     @Arg("email") email: string,
-    @Ctx() { em, redis }: MyContext
+    @Ctx() { redis }: MyContext
   ) {
     // have to use {where: } when entity is not the primary key
     const user = await User.findOne({ where: email });
@@ -140,7 +140,10 @@ export class UserResolver {
     const hashedPassword = await argon2.hash(options.password);
     let user;
     try {
-      // manual way using query builder //
+      // using typeORM  (pass value object in as an arg)
+      // User.create({}).save()
+      // using manual way with query builder //
+      // insert a user and get it back
       const result = await getConnection()
         .createQueryBuilder()
         .insert()
@@ -153,9 +156,8 @@ export class UserResolver {
         .returning("*")
         .execute();
       console.log("result", result);
-      user = result.raw;
+      user = result.raw[0];
     } catch (err) {
-      console.log("error", err);
       // handle duplicate username error
       if (err.code === "23505") {
         // || err.detail.includes('already exists')) {
