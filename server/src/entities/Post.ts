@@ -11,17 +11,17 @@ import {
 @ObjectType()
 @Entity()
 export class Post extends BaseEntity {
-  @Field(() => Int)
+  @Field()
   @PrimaryGeneratedColumn()
   id!: number;
 
   @Field(() => String)
   @CreateDateColumn()
-  createdAt = Date;
+  createdAt: Date;
 
   @Field(() => String)
   @UpdateDateColumn()
-  updatedAt = Date;
+  updatedAt: Date;
 
   @Field()
   @Column()
