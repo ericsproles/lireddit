@@ -19,7 +19,15 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
   } else if (!data?.me) {
     body = (
       <>
+        <NextLink href="/create-post">
+          <Link color="white" mr={2}>
+            create post
+          </Link>
+        </NextLink>
         <NextLink href="/login">
+          {/* <Link color="white" mr={2}>
+            create post
+          </Link> */}
           <Link color="white" mr={2}>
             login
           </Link>
@@ -47,7 +55,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
     );
   }
   return (
-    <Flex bg="tan" p={4}>
+    <Flex position="sticky" bg="tan" p={4}>
       <Box ml={"auto"}>{body}</Box>
     </Flex>
   );
