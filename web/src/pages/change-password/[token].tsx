@@ -14,7 +14,6 @@ import NextLink from "next/link";
 const ChangePassword: NextPage = () => {
   const [, changePassword] = useChangePasswordMutation();
   const router = useRouter();
-  console.log("router:", router);
   const [tokenError, setTokenError] = useState("");
 
   return (
