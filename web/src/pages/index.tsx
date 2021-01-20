@@ -1,59 +1,41 @@
-import { Navbar } from "../components/Navbar";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { usePostsQuery } from "../generated/graphql";
 import { Layout } from "../components/Layout";
+import { Stack, Box, Heading, Text, Flex, Button } from "@chakra-ui/react";
+import React from "react";
 
 const Index = () => {
-  const [{ data }] = usePostsQuery({
+  const [{ data, fetching }] = usePostsQuery({
     variables: { limit: 10 },
   });
+
+  if (!fetching && !data) {
+    return <div> no posts </div>;
+  }
   return (
     <Layout>
-      <div>Posts:</div>
+      <Heading size="md">Posts</Heading>
       <br />
-      {!data ? (
+      {!data && fetching ? (
         <div>loading...</div>
       ) : (
-        data.posts.map((post) => <div key={post.id}>{post.title}</div>)
+        <Stack spacing={8}>
+          {data!.posts.map((post) => (
+            <Box key={post.id} p={5} shadow="md" borderWidth="1px">
+              <Heading fontSize="xl">{post.title}</Heading>
+              <Text mt={4}>{post.textSnippet}...</Text>
+            </Box>
+          ))}
+        </Stack>
       )}
+      {data ? (
+        <Flex justify="center">
+          <Button my={6}>load more</Button>
+        </Flex>
+      ) : null}
     </Layout>
   );
-  // <Container height="100vh">
-  //   <Hero />
-  //   <Main>
-  //     <Text>
-  //       Example repository of <Code>Next.js</Code> + <Code>chakra-ui</Code> +{' '}
-  //       <Code>typescript</Code>.
-  //     </Text>
-
-  //     <List spacing={3} my={0}>
-  //       <ListItem>
-  //         <ListIcon as={CheckCircleIcon} color="green.500" />
-  //         <ChakraLink
-  //           isExternal
-  //           href="https://chakra-ui.com"
-  //           flexGrow={1}
-  //           mr={2}
-  //         >
-  //           Chakra UI <LinkIcon />
-  //         </ChakraLink>
-  //       </ListItem>
-  //       <ListItem>
-  //         <ListIcon as={CheckCircleIcon} color="green.500" />
-  //         <ChakraLink isExternal href="https://nextjs.org" flexGrow={1} mr={2}>
-  //           Next.js <LinkIcon />
-  //         </ChakraLink>
-  //       </ListItem>
-  //     </List>
-  //   </Main>
-
-  //   <DarkModeSwitch />
-  //   <Footer>
-  //     <Text>Next ❤️ Chakra</Text>
-  //   </Footer>
-  //   <CTA />
-  // </Container>
 };
 
 export default withUrqlClient(createUrqlClient, { ssr: true })(Index);
