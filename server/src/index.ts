@@ -14,9 +14,13 @@ import { createConnection } from "typeorm";
 import { Post } from "./entities/Post";
 import { User } from "./entities/User";
 import dotenv from "dotenv";
+import path from "path";
 dotenv.config();
 
+// comment
 const main = async () => {
+  console.log("running createConnection");
+  console.log("dirname", path.join(__dirname, "./migrations"));
   const conn = await createConnection({
     type: "postgres",
     database: "newreddit2",
@@ -24,10 +28,10 @@ const main = async () => {
     password: process.env.POSTGRES_PASSWORD,
     logging: true,
     synchronize: true,
+    migrations: [path.join(__dirname, "./migrations/*")],
     entities: [Post, User],
   });
-
-  console.log("process.env.POSTGRES_PASSWORD", process.env.POSTGRES_PASSWORD);
+  await conn.runMigrations();
 
   // Connect to DB
 
