@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Link } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading, Link, MenuItem } from "@chakra-ui/react";
 import React from "react";
 import NextLink from "next/link";
 import { useLogoutMutation, useMeQuery } from "../generated/graphql";
@@ -11,6 +11,8 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
   const [{ data, fetching }] = useMeQuery({
     pause: isServer(),
   });
+  const [show, setShow] = React.useState(false);
+  const handleToggle = () => setShow(!show);
   let body = null;
 
   // data is loading
@@ -19,44 +21,130 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
   } else if (!data?.me) {
     body = (
       <>
-        <NextLink href="/create-post">
-          <Link color="white" mr={2}>
-            create post
-          </Link>
-        </NextLink>
-        <NextLink href="/login">
-          {/* <Link color="white" mr={2}>
-            create post
-          </Link> */}
-          <Link color="white" mr={2}>
-            login
-          </Link>
-        </NextLink>
-        <NextLink href="/register">
-          <Link color="white" mr={2}>
-            register
-          </Link>
-        </NextLink>
+        <Flex
+          as="nav"
+          align="center"
+          justify="space-between"
+          wrap="wrap"
+          padding="1.5rem"
+          bg="gray.700"
+          color="white"
+        >
+          <Flex align="center" mr={5}>
+            <Heading as="h1" size="lg" letterSpacing={"-.1rem"}>
+              NewReddit
+            </Heading>
+          </Flex>
+
+          <Box display={{ base: "block", md: "none" }} onClick={handleToggle}>
+            <svg
+              fill="white"
+              width="12px"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <title>Menu</title>
+              <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
+            </svg>
+          </Box>
+
+          <Box
+            display={{ sm: show ? "block" : "none", md: "flex" }}
+            width={{ sm: "full", md: "auto" }}
+            alignItems="center"
+            flexGrow={1}
+          >
+            <NextLink href="/create-post">
+              <Link color="white" mr={2}>
+                create post
+              </Link>
+            </NextLink>
+          </Box>
+
+          <Box
+            display={{ sm: show ? "block" : "none", md: "block" }}
+            mt={{ base: 4, md: 0 }}
+          >
+            <Button bg="transparent" border="1px" mr={3}>
+              <NextLink href="/login">
+                <Link color="white" mr={2}>
+                  Login
+                </Link>
+              </NextLink>
+            </Button>
+            <Button bg="transparent" border="1px">
+              <NextLink href="/login">
+                <Link color="white" mr={2}>
+                  Register
+                </Link>
+              </NextLink>
+            </Button>
+          </Box>
+        </Flex>
       </>
     );
     // user is logged in
   } else {
     body = (
-      <Flex>
-        <Box mr={2}>hi, {data.me.username}</Box>
-        <Button
-          isLoading={logoutFetching}
-          onClick={() => logout()}
-          variant="link"
+      <>
+        <Flex
+          as="nav"
+          align="center"
+          justify="space-between"
+          wrap="wrap"
+          padding="1.5rem"
+          bg="gray.700"
+          color="white"
         >
-          logout
-        </Button>
-      </Flex>
+          <Flex align="center" mr={5}>
+            <Heading as="h1" size="lg" letterSpacing={"-.1rem"}>
+              NewReddit
+            </Heading>
+          </Flex>
+
+          <Box display={{ base: "block", md: "none" }} onClick={handleToggle}>
+            <svg
+              fill="white"
+              width="12px"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <title>Menu</title>
+              <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
+            </svg>
+          </Box>
+
+          <Box
+            display={{ sm: show ? "block" : "none", md: "flex" }}
+            width={{ sm: "full", md: "auto" }}
+            alignItems="center"
+            flexGrow={1}
+          >
+            <NextLink href="/create-post">
+              <Link color="white" mr={2}>
+                create post
+              </Link>
+            </NextLink>
+          </Box>
+
+          <Box
+            display={{ sm: show ? "block" : "none", md: "block" }}
+            mt={{ base: 4, md: 0 }}
+          >
+            <Flex>
+              <Box mr={2}>hi, {data.me.username}</Box>
+              <Button
+                isLoading={logoutFetching}
+                onClick={() => logout()}
+                variant="link"
+              >
+                logout
+              </Button>
+            </Flex>
+          </Box>
+        </Flex>
+      </>
     );
   }
-  return (
-    <Flex position="sticky" bg="tan" p={4}>
-      <Box ml={"auto"}>{body}</Box>
-    </Flex>
-  );
+  return <Box>{body}</Box>;
 };
