@@ -45,6 +45,7 @@ export class PostResolver {
     @Arg("limit", () => Int) limit: number,
     @Arg("cursor", () => String, { nullable: true }) cursor: string | null
   ): Promise<PaginatedPosts> {
+    // get number of posts + 1, if that
     const realLimit = Math.min(50, limit);
     const realLimitPlusOne = realLimit + 1;
     const queryBuilder = getConnection()
@@ -57,7 +58,11 @@ export class PostResolver {
         cursor: new Date(parseInt(cursor)),
       });
     }
+    // posts is numbber of posts + 1
     const posts = await queryBuilder.getMany();
+    // return the real number of posts
+    // check if number of posts + 1 is equal to the realLimitPlusOne, if true that means there are more posts that can be loaded
+    // ex. fetch 5+1 posts, check if that is equal to limit(5) + 1
     return {
       posts: posts.slice(0, realLimit),
       hasMore: posts.length === realLimitPlusOne,

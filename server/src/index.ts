@@ -19,8 +19,6 @@ dotenv.config();
 
 // comment
 const main = async () => {
-  console.log("running createConnection");
-  console.log("dirname", path.join(__dirname, "./migrations"));
   const conn = await createConnection({
     type: "postgres",
     database: "newreddit2",
@@ -33,8 +31,9 @@ const main = async () => {
   });
   await conn.runMigrations();
 
-  // Connect to DB
+  // await Post.delete({});
 
+  // Connect to DB
   const app = express();
 
   const RedisStore = connectRedis(session);
