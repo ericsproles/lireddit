@@ -4,6 +4,7 @@ import {
   Ctx,
   Field,
   FieldResolver,
+  Info,
   InputType,
   Int,
   Mutation,
@@ -36,30 +37,59 @@ class PaginatedPosts {
 @Resolver(Post)
 export class PostResolver {
   @FieldResolver(() => String)
-  textSnippet(@Root() root: Post) {
-    return root.text.slice(0, 75);
+  textSnippet(@Root() post: Post) {
+    return post.text.slice(0, 75);
   }
 
   @Query(() => PaginatedPosts)
   async posts(
     @Arg("limit", () => Int) limit: number,
-    @Arg("cursor", () => String, { nullable: true }) cursor: string | null
+    @Arg("cursor", () => String, { nullable: true }) cursor: string | null,
+    @Info() info: any
   ): Promise<PaginatedPosts> {
     // get number of posts + 1, if that
     const realLimit = Math.min(50, limit);
     const realLimitPlusOne = realLimit + 1;
-    const queryBuilder = getConnection()
-      .getRepository(Post)
-      .createQueryBuilder("p")
-      .orderBy('"createdAt"', "DESC")
-      .take(realLimitPlusOne);
+
+    const replacements: any[] = [realLimitPlusOne];
     if (cursor) {
-      queryBuilder.where('"createdAt" < :cursor', {
-        cursor: new Date(parseInt(cursor)),
-      });
+      replacements.push(new Date(parseInt(cursor)));
     }
-    // posts is numbber of posts + 1
-    const posts = await queryBuilder.getMany();
+
+    // MANUAL WAY OF FETCHING SQL
+    const posts = await getConnection().query(
+      `
+      select p.*,
+      json_build_object(
+        'id', u.id,
+        'username', u.username,
+        'email', u.email
+        ) creator
+      from post p
+      inner join public.user u on u.id = p."creatorId"
+      ${cursor ? `where p."createdAt" <$2` : ""}
+      order by p."createdAt" DESC
+      limit $1
+      `,
+      replacements
+    );
+    console.log("posts:", posts);
+
+    // USING QUERYBUILDER TO CREATE SQL QUERY
+    // const queryBuilder = getConnection()
+    //   .getRepository(Post)
+    //   .createQueryBuilder("p")
+    //   .innerJoinAndSelect("p.creator", "user", 'user.id = p."creatorId"')
+    //   .orderBy('"createdAt"', "DESC")
+    //   .take(realLimitPlusOne);
+    // if (cursor) {
+    //   queryBuilder.where('p."createdAt" < :cursor', {
+    //     cursor: new Date(parseInt(cursor)),
+    //   });
+    // }
+
+    // posts is number of posts + 1
+    // const posts = await queryBuilder.getMany();
     // return the real number of posts
     // check if number of posts + 1 is equal to the realLimitPlusOne, if true that means there are more posts that can be loaded
     // ex. fetch 5+1 posts, check if that is equal to limit(5) + 1
