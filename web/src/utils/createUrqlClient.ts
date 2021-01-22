@@ -8,7 +8,7 @@ import {
   LoginMutation,
   RegisterMutation,
 } from "../generated/graphql";
-import { filter, pipe, tap } from "wonka";
+import { pipe, tap } from "wonka";
 import { Exchange } from "urql";
 import Router from "next/router";
 import { stringifyVariables } from "@urql/core";
@@ -139,6 +139,16 @@ export const createUrqlClient = (ssrExchange: any) => ({
       },
       updates: {
         Mutation: {
+          // remove item from client side cache and saying to refetch this data
+          createPost: (_result, args, cache, info) => {
+            const allFields = cache.inspectFields("Query");
+            const fieldInfos = allFields.filter(
+              (info) => info.fieldName === "posts"
+            );
+            fieldInfos.forEach((fi) => {
+              cache.invalidate("Query", "posts", fi.arguments || {});
+            });
+          },
           logout: (_result, args, cache, info) => {
             betterUpdateQuery<LogoutMutation, MeQuery>(
               cache,
