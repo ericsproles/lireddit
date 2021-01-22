@@ -5,7 +5,6 @@ import session from "express-session";
 import Redis from "ioredis";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
-import { HelloResolver } from "./resolvers/hello";
 import { PostResolver } from "./resolvers/post";
 import { UserResolver } from "./resolvers/user";
 import connectRedis from "connect-redis";
@@ -15,6 +14,7 @@ import { Post } from "./entities/Post";
 import { User } from "./entities/User";
 import dotenv from "dotenv";
 import path from "path";
+import { Updoot } from "./entities/Updoot";
 dotenv.config();
 
 // comment
@@ -27,7 +27,7 @@ const main = async () => {
     logging: true,
     synchronize: true,
     migrations: [path.join(__dirname, "./migrations/*")],
-    entities: [Post, User],
+    entities: [Post, User, Updoot],
   });
   await conn.runMigrations();
 
@@ -68,7 +68,7 @@ const main = async () => {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [HelloResolver, PostResolver, UserResolver],
+      resolvers: [PostResolver, UserResolver],
       validate: false,
     }),
     context: ({ req, res }) => ({ req, res, redis }),
