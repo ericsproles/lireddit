@@ -7,7 +7,7 @@ import { User } from "./User";
 // many to many
 // user <-> posts
 // user -> join table <- posts
-// useer -> updoot <- posts
+// user -> updoot <- posts
 
 @ObjectType()
 @Entity()
