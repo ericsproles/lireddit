@@ -1,14 +1,10 @@
 # A new and modern twist on Reddit
 
-## Frontend () => React, Typescript, Next.js, Chakra-UI
+## Frontend () => { React, Typescript, Next.js, Chakra-UI }
 
-## Backend () => Node.js, Typescript, GraphQL { with PostgreSQL, TypeORM & Redis }
+## Backend () => { Node.js, Typescript, GraphQL, PostgreSQL, TypeORM & Redis }
 
 ## Check out the demo here:
-
-Deploy the example using [Vercel](https://vercel.com):
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/import/project?template=https://github.com/vercel/next.js/tree/canary/examples/with-chakra-ui-typescript)
 
 ## Or run locally following these steps:
 
