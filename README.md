@@ -15,7 +15,8 @@ git clone https://github.com/ericsproles/newreddit.git
 cd server && yarn dev
 ```
 
-(Start the Next.js app) => { open new terminal }
+Start the Next.js app =>  
+open new terminal
 
 ```bash
 cd web && yarn dev
