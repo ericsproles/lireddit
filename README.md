@@ -2,7 +2,7 @@
 
 ## Frontend () => { React, Typescript, Next.js, Chakra-UI }
 
-## Backend () => { Node.js, Typescript, GraphQL, PostgreSQL, TypeORM & Redis }
+## Backend () => { Node.js, Typescript, GraphQL, PostgreSQL, TypeORM, Redis }
 
 ## Check out the demo here:
 
