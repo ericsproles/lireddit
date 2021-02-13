@@ -2,7 +2,16 @@ import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { usePostsQuery } from "../generated/graphql";
 import { Layout } from "../components/Layout";
-import { Stack, Box, Heading, Text, Flex, Button } from "@chakra-ui/react";
+import NextLink from "next/link";
+import {
+  Stack,
+  Box,
+  Heading,
+  Text,
+  Flex,
+  Button,
+  Link,
+} from "@chakra-ui/react";
 
 import React, { useState } from "react";
 import { UpdootSection } from "../components/UpdootSection";
@@ -34,7 +43,11 @@ const Index = () => {
               <UpdootSection post={post} />
 
               <Box>
-                <Heading fontSize="xl">{post.title}</Heading>
+                <NextLink href="/post/[id]" as={`/post/${post.id}`}>
+                  <Link>
+                    <Heading fontSize="xl">{post.title}</Heading>
+                  </Link>
+                </NextLink>
                 <Text>posted by {post.creator.username}</Text>
                 <Text mt={4}>{post.textSnippet}...</Text>
               </Box>
