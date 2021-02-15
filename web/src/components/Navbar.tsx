@@ -2,7 +2,6 @@ import { Box, Button, Flex, Heading, Link, MenuItem } from "@chakra-ui/react";
 import React from "react";
 import NextLink from "next/link";
 import { useLogoutMutation, useMeQuery } from "../generated/graphql";
-import { isServer } from "../utils/isServer";
 
 interface NavbarProps {}
 
@@ -57,13 +56,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
             width={{ sm: "full", md: "auto" }}
             alignItems="center"
             flexGrow={1}
-          >
-            <NextLink href="/create-post">
-              <Link color="white" mr={2}>
-                create post
-              </Link>
-            </NextLink>
-          </Box>
+          ></Box>
 
           <Box
             display={{ sm: show ? "block" : "none", md: "block" }}
@@ -127,13 +120,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
             width={{ sm: "full", md: "auto" }}
             alignItems="center"
             flexGrow={1}
-          >
-            <NextLink href="/create-post">
-              <Link color="white" mr={2}>
-                create post
-              </Link>
-            </NextLink>
-          </Box>
+          ></Box>
 
           <Box
             display={{ sm: show ? "block" : "none", md: "block" }}

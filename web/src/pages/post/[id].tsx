@@ -24,6 +24,11 @@ export const Post = ({}) => {
       </Layout>
     );
   }
+
+  if (error) {
+    return <div>{error.message}</div>;
+  }
+
   if (!data?.post) {
     return (
       <Layout>
