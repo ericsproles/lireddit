@@ -9,7 +9,7 @@ interface NavbarProps {}
 export const Navbar: React.FC<NavbarProps> = ({}) => {
   const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
   const [{ data, fetching }] = useMeQuery({
-    pause: isServer(),
+    // pause: isServer(),
   });
   const [show, setShow] = React.useState(false);
   const handleToggle = () => setShow(!show);
@@ -32,7 +32,11 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
         >
           <Flex align="center" mr={5}>
             <Heading as="h1" size="lg" letterSpacing={"-.1rem"}>
-              NewReddit
+              <NextLink href="/">
+                <Link>
+                  <Heading>NewReddit</Heading>
+                </Link>
+              </NextLink>
             </Heading>
           </Flex>
 
@@ -97,9 +101,13 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           color="white"
         >
           <Flex align="center" mr={5}>
-            <Heading as="h1" size="lg" letterSpacing={"-.1rem"}>
-              NewReddit
-            </Heading>
+            <NextLink href="/">
+              <Link>
+                <Heading as="h1" size="lg" letterSpacing={"-.1rem"}>
+                  NewReddit
+                </Heading>
+              </Link>
+            </NextLink>
           </Flex>
 
           <Box display={{ base: "block", md: "none" }} onClick={handleToggle}>
