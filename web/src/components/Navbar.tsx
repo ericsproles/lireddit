@@ -70,7 +70,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
               </NextLink>
             </Button>
             <Button bg="transparent" border="1px">
-              <NextLink href="/login">
+              <NextLink href="/register">
                 <Link color="white" mr={2}>
                   Register
                 </Link>
