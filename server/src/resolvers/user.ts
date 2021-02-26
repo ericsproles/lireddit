@@ -134,7 +134,7 @@ export class UserResolver {
     if (!req.session.userId) {
       return null;
     }
-    return User.findOne({ id: req.session.userId });
+    return User.findOne(req.session.userId);
   }
 
   @Mutation(() => UserResponse)

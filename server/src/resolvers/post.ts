@@ -17,6 +17,7 @@ import { MyContext } from "src/types";
 import { isAuth } from "../middleware/isAuth";
 import { getConnection } from "typeorm";
 import { Updoot } from "../entities/Updoot";
+import { User } from "../entities/User";
 
 @InputType()
 class PostInput {
@@ -40,6 +41,17 @@ export class PostResolver {
   textSnippet(@Root() post: Post) {
     return post.text.slice(0, 75);
   }
+
+  @FieldResolver(() => User)
+  creator(@Root() post: Post, @Ctx() { userLoader }: MyContext) {
+    return userLoader.load(post.creatorId);
+  }
+
+  // WIP
+  // @FieldResolver(() => Int, { nullable: true })
+  // voteStatus(@Root() post: Post, @Ctx() { userLoader }: MyContext) {
+  //   return;
+  // }
 
   @Mutation(() => Boolean)
   async vote(
@@ -122,29 +134,44 @@ export class PostResolver {
       cursorIndex = replacements.length;
     }
 
-    // MANUAL WAY OF FETCHING SQL
     const posts = await getConnection().query(
       `
       select p.*,
-      json_build_object(
-        'id', u.id,
-        'username', u.username,
-        'email', u.email
-        ) creator,
-        ${
-          req.session.userId
-            ? '(select value from updoot where "userId" = $2 and "postId" = p.id) "voteStatus"'
-            : 'null as "voteStatus"'
-        }
+      ${
+        req.session.userId
+          ? '(select value from updoot where "userId" = $2 and "postId" = p.id) "voteStatus"'
+          : 'null as "voteStatus"'
+      }
       from post p
-      inner join public.user u on u.id = p."creatorId"
       ${cursor ? `where p."createdAt" < $${cursorIndex}` : ""}
       order by p."createdAt" DESC
       limit $1
       `,
       replacements
     );
-    // console.log("posts:", posts);
+
+    // MANUAL WAY OF FETCHING SQL -- Good for performance, good because it is simple SQL
+    // const posts = await getConnection().query(
+    //   `
+    //   select p.*,
+    //   json_build_object(
+    //     'id', u.id,
+    //     'username', u.username,
+    //     'email', u.email
+    //     ) creator,
+    //     ${
+    //       req.session.userId
+    //         ? '(select value from updoot where "userId" = $2 and "postId" = p.id) "voteStatus"'
+    //         : 'null as "voteStatus"'
+    //     }
+    //   from post p
+    //   inner join public.user u on u.id = p."creatorId"
+    //   ${cursor ? `where p."createdAt" < $${cursorIndex}` : ""}
+    //   order by p."createdAt" DESC
+    //   limit $1
+    //   `,
+    //   replacements
+    // );
 
     // USING QUERYBUILDER TO CREATE SQL QUERY
     // const queryBuilder = getConnection()
@@ -172,7 +199,7 @@ export class PostResolver {
 
   @Query(() => Post, { nullable: true })
   post(@Arg("id", () => Int) id: number): Promise<Post | undefined> {
-    return Post.findOne(id, { relations: ["creator"] });
+    return Post.findOne(id);
   }
 
   @Mutation(() => Post)
