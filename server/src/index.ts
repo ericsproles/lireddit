@@ -16,6 +16,7 @@ import dotenv from "dotenv";
 import path from "path";
 import { Updoot } from "./entities/Updoot";
 import { createUserLoader } from "./utils/createUserLoader";
+import { createUpdootLoader } from "./utils/createUpdootLoader";
 dotenv.config();
 
 // comment
@@ -76,8 +77,8 @@ const main = async () => {
       req,
       res,
       redis,
-      // batches and caches loading of users on a single request
-      userLoader: createUserLoader(),
+      userLoader: createUserLoader(), // batches and caches loading of users on a single request
+      updootLoader: createUpdootLoader(), // batches and caches loading of updoots on a single request
     }),
   });
 
