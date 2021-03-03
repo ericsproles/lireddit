@@ -76,6 +76,7 @@ const main = async () => {
       req,
       res,
       redis,
+      // batches and caches loading of users on a single request
       userLoader: createUserLoader(),
     }),
   });

@@ -1,27 +1,21 @@
-import { withUrqlClient } from "next-urql";
-import { createUrqlClient } from "../utils/createUrqlClient";
 import {
-  useDeletePostMutation,
-  useMeQuery,
-  usePostsQuery,
-} from "../generated/graphql";
-import { Layout } from "../components/Layout";
-import NextLink from "next/link";
-import {
-  Stack,
   Box,
-  Heading,
-  Text,
-  Flex,
   Button,
+  Flex,
+  Heading,
   Link,
   Spacer,
-  IconButton,
+  Stack,
+  Text,
 } from "@chakra-ui/react";
-
+import { withUrqlClient } from "next-urql";
+import NextLink from "next/link";
 import React, { useState } from "react";
+import { EditDeletePostButtons } from "../components/EditDeletePostButtons";
+import { Layout } from "../components/Layout";
 import { UpdootSection } from "../components/UpdootSection";
-import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
+import { useMeQuery, usePostsQuery } from "../generated/graphql";
+import { createUrqlClient } from "../utils/createUrqlClient";
 
 const Index = () => {
   const [variables, setVariables] = useState({
@@ -29,11 +23,9 @@ const Index = () => {
     cursor: null as null | string,
   });
 
-  const [{ data: meData }] = useMeQuery();
   const [{ data, fetching }] = usePostsQuery({
     variables,
   });
-  const [, deletePost] = useDeletePostMutation();
 
   if (!fetching && !data) {
     return <div> no posts </div>;
@@ -68,29 +60,10 @@ const Index = () => {
                   <Flex align="center">
                     <Text mt={4}>{post.textSnippet}...</Text>
                     <Spacer />
-                    {meData?.me?.id !== post.creator.id ? null : (
-                      <Box>
-                        <NextLink
-                          href="/post/edit/[id]"
-                          as={`/post/edit/${post.id}`}
-                        >
-                          <IconButton
-                            size="sm"
-                            mr={4}
-                            aria-label="updoot post"
-                            icon={<EditIcon />}
-                          />
-                        </NextLink>
-                        <IconButton
-                          size="sm"
-                          aria-label="updoot post"
-                          icon={<DeleteIcon />}
-                          onClick={() => {
-                            deletePost({ id: post.id });
-                          }}
-                        />
-                      </Box>
-                    )}
+                    <EditDeletePostButtons
+                      id={post.id}
+                      creatorId={post.creator.id}
+                    />
                   </Flex>
                 </Box>
               </Flex>
