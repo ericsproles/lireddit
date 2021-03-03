@@ -18,6 +18,9 @@ export const createUpdootLoader = () =>
       });
       console.log("updoots:", updoots);
       console.log("updootIdsToUpdoot", updootIdsToUpdoot);
+      console.log(
+        keys.map((key) => updootIdsToUpdoot[`${key.userId}|${key.postId}`])
+      );
       return keys.map(
         (key) => updootIdsToUpdoot[`${key.userId}|${key.postId}`]
       );

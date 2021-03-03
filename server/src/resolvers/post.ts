@@ -45,6 +45,7 @@ export class PostResolver {
   @FieldResolver(() => User)
   // batches all the IDs into a single function call
   creator(@Root() post: Post, @Ctx() { userLoader }: MyContext) {
+    // load data from dataloader, returns promise of User
     return userLoader.load(post.creatorId);
   }
 
@@ -54,6 +55,7 @@ export class PostResolver {
     @Ctx() { updootLoader, req }: MyContext
   ) {
     if (!req.session.userId) return null;
+    // load data from dataloader, returns promise of Updoot
     const updoot = await updootLoader.load({
       postId: post.id,
       userId: req.session.userId,

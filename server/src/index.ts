@@ -77,8 +77,8 @@ const main = async () => {
       req,
       res,
       redis,
-      userLoader: createUserLoader(), // batches and caches loading of users on a single request
-      updootLoader: createUpdootLoader(), // batches and caches loading of updoots on a single request
+      userLoader: createUserLoader(), // batches and caches loading of users on a every single request
+      updootLoader: createUpdootLoader(), // batches and caches loading of updoots on every single request
     }),
   });
 
