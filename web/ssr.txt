@@ -2,3 +2,18 @@ me -> browse http://localhost:3000
 -> next.js server -> request graphql server localhost:4000
 -> building the HTML
 -> sending back to your browser
+
+
+COOKIE
+When posts first load, it does a SSR request, and the cookie is not sent so it doesn't know who we are.
+When you click load more, it's making a request from the browser straight to the GQL api and now has session cookie
+ssr
+    browser -> next.js -> graphql API
+client side
+    browser -> graphql API
+
+ADDING COOKIE TO RETURN OBJECT IN URQL CLIENT
+Browser will send cookie to NextJS server and NextJS will include them in header to the GraphQL API
+When GraphQL API has cookie, it can tell whether you voted or not
+
+You can know if your user is authenticated or not when doing SSR when using cookies

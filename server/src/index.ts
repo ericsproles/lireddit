@@ -1,4 +1,5 @@
 import "reflect-metadata";
+import "dotenv-safe/config";
 import { COOKIE_NAME, __prod__ } from "./constants";
 import express from "express";
 import session from "express-session";
@@ -12,22 +13,18 @@ import cors from "cors";
 import { createConnection } from "typeorm";
 import { Post } from "./entities/Post";
 import { User } from "./entities/User";
-import dotenv from "dotenv";
 import path from "path";
 import { Updoot } from "./entities/Updoot";
 import { createUserLoader } from "./utils/createUserLoader";
 import { createUpdootLoader } from "./utils/createUpdootLoader";
-dotenv.config();
 
 // comment
 const main = async () => {
   const conn = await createConnection({
     type: "postgres",
-    database: "newreddit2",
-    username: process.env.POSTGRES_USERNAME,
-    password: process.env.POSTGRES_PASSWORD,
+    url: process.env.DATABASE_URL,
     logging: true,
-    synchronize: true,
+    // synchronize: true,
     migrations: [path.join(__dirname, "./migrations/*")],
     entities: [Post, User, Updoot],
   });
@@ -39,11 +36,12 @@ const main = async () => {
   const app = express();
 
   const RedisStore = connectRedis(session);
-  const redis = new Redis();
+  const redis = new Redis(process.env.REDIS_URL);
 
+  app.set("proxy", 1);
   app.use(
     cors({
-      origin: "http://localhost:3000",
+      origin: process.env.CORS_ORIGIN,
       credentials: true,
     })
   );
@@ -60,10 +58,11 @@ const main = async () => {
         maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years
         httpOnly: true,
         secure: __prod__, // cookie only works in https
+        // domain: __prod__ ? ".codeponder.com" : undefined
         sameSite: "lax", // csrf
       },
       saveUninitialized: false,
-      secret: "qweasdzxc",
+      secret: process.env.SESSION_SECRET,
       resave: false,
     })
   );
@@ -90,7 +89,7 @@ const main = async () => {
   app.get("/", (_, res) => {
     res.send("hello");
   });
-  app.listen(4000, () => {
+  app.listen(parseInt(process.env.PORT), () => {
     console.log("server started on localhost:4000");
   });
 
@@ -104,5 +103,3 @@ const main = async () => {
 main().catch((err) => {
   console.error(err);
 });
-
-console.log("hello newww yorrkk");
