@@ -1,7 +1,7 @@
 import { Box, Button, Link } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
-import { NextPage } from "next";
-import { withUrqlClient } from "next-urql";
+import { NextComponentType, NextPage } from "next";
+import { PartialNextContext, withUrqlClient } from "next-urql";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { InputField } from "../../components/InputField";
@@ -72,4 +72,6 @@ const ChangePassword: NextPage = () => {
   );
 };
 
-export default withUrqlClient(createUrqlClient)(ChangePassword);
+export default withUrqlClient(createUrqlClient)(
+  ChangePassword as NextComponentType<PartialNextContext, {}, {}>
+);
