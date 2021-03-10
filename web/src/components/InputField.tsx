@@ -23,7 +23,7 @@ export const InputField: React.FC<InputFieldProps> = ({
   let InputOrTextarea = Input;
 
   if (textarea) {
-    InputOrTextarea = Textarea;
+    InputOrTextarea = Textarea as any;
   }
   const [field, { error }] = useField(props);
   return (
@@ -32,20 +32,5 @@ export const InputField: React.FC<InputFieldProps> = ({
       <InputOrTextarea {...field} {...props} id={field.name} />
       <FormErrorMessage>{error}</FormErrorMessage>
     </FormControl>
-    // <FormControl isInvalid={!!error}>
-    //   {textarea ? (
-    //     <>
-    //       <FormLabel htmlFor="name">{label}</FormLabel>
-    //       <Textarea {...field} {...props} id={field.name} />
-    //       <FormErrorMessage>{error}</FormErrorMessage>
-    //     </>
-    //   ) : (
-    //     <>
-    //       <FormLabel htmlFor="name">{label}</FormLabel>
-    //       <Input {...field} {...props} id={field.name} />
-    //       <FormErrorMessage>{error}</FormErrorMessage>
-    //     </>
-    //   )}
-    // </FormControl>
   );
 };
