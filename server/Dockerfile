@@ -17,6 +17,7 @@ RUN yarn
 
 # Bundle app source
 COPY . .
+# Copy local env.production file to dokku
 COPY .env.production .env
 RUN yarn build
 
