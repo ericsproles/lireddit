@@ -24,7 +24,7 @@ const main = async () => {
     type: "postgres",
     url: process.env.DATABASE_URL,
     logging: true,
-    // synchronize: true,
+    synchronize: __prod__ ? false : true,
     migrations: [path.join(__dirname, "./migrations/*")],
     entities: [Post, User, Updoot],
   });
@@ -58,7 +58,7 @@ const main = async () => {
         maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years
         httpOnly: true,
         secure: __prod__, // cookie only works in https
-        // domain: __prod__ ? ".codeponder.com" : undefined
+        domain: __prod__ ? ".ericsproles.com" : undefined,
         sameSite: "lax", // csrf
       },
       saveUninitialized: false,
