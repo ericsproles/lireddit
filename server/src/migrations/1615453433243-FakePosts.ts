@@ -1,9 +1,10 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class MockPosts1611186094097 implements MigrationInterface {
-  public async up(queryRunner: QueryRunner): Promise<void> {
-    //     queryRunner.query(`
-    //         insert into post (title, text, "creatorId", "createdAt") values ('Surviving Progress', 'In hac habitasse platea dictumst. Etiam faucibus cursus urna. Ut tellus.
+export class FakePosts1615453433243 implements MigrationInterface {
+  public async up(_: QueryRunner): Promise<void> {
+    // await queryRunner.query(
+    // `
+    //   insert into post (title, text, "creatorId", "createdAt") values ('Surviving Progress', 'In hac habitasse platea dictumst. Etiam faucibus cursus urna. Ut tellus.
     // Nulla ut erat id mauris vulputate elementum. Nullam varius. Nulla facilisi.', 1, '2020-08-23T22:47:11Z');
     // insert into post (title, text, "creatorId", "createdAt") values ('Transformers: The Movie', 'Sed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus.', 1, '2020-08-29T01:56:07Z');
     // insert into post (title, text, "creatorId", "createdAt") values ('Big Hit, The', 'Maecenas ut massa quis augue luctus tincidunt. Nulla mollis molestie lorem. Quisque ut erat.', 1, '2020-02-09T21:59:19Z');
@@ -207,8 +208,8 @@ export class MockPosts1611186094097 implements MigrationInterface {
     // In hac habitasse platea dictumst. Etiam faucibus cursus urna. Ut tellus.
     // Nulla ut erat id mauris vulputate elementum. Nullam varius. Nulla facilisi.', 1, '2020-02-10T05:16:33Z');
     // insert into post (title, text, "creatorId", "createdAt") values ('Amazing Grace and Chuck', 'Aenean lectus. Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum.', 1, '2020-08-08T07:06:25Z');
-    //`
-    //);
+    //   `
+    // );
   }
 
   public async down(_: QueryRunner): Promise<void> {}
