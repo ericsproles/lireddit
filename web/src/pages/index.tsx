@@ -38,7 +38,7 @@ const Index = () => {
         </Heading>
         <Spacer />
         <NextLink href="/create-post">
-          <Button as={Link}>Create Post</Button>
+          <Button>Create Post</Button>
         </NextLink>
       </Flex>
       <br />
